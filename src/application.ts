@@ -1,5 +1,5 @@
-import express from "express";
-import { apiRouter } from "./routes/api";
+import express from 'express';
+import { apiRouter } from './routes/api';
 
 export default class App {
     public app: express.Application;

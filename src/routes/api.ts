@@ -1,10 +1,10 @@
-import UserController from "../controllers/UserController";
+import UserController from '../controllers/UserController';
 
 import { Router } from 'express';
 import { createValidator } from 'express-joi-validation';
-import { createUserValidation } from "../requests/CreateOrUpdateUserRequest";
-import { idValidationRequest } from "../requests/IdValidationRequest";
-import { getAutoSuggestUsers } from "../requests/GetAutoSuggestUsersRequest";
+import { createUserValidation } from '../requests/CreateOrUpdateUserRequest';
+import { idValidationRequest } from '../requests/IdValidationRequest';
+import { getAutoSuggestUsers } from '../requests/GetAutoSuggestUsersRequest';
 
 const apiRouter = Router();
 const validator = createValidator();

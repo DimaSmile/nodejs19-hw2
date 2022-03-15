@@ -31,14 +31,14 @@ export default class User {
         return this;
     }
 
-    public static delete({id}: { id: string }) {
+    public static delete({ id }: { id: string }) {
         const user = User.getUserById(id);
 
         user.isDeleted = true;
         return true;
     }
 
-    public static filterByLoginSubstring({login, limit = 10}: { login: string, limit: number }) {
+    public static filterByLoginSubstring({ login, limit = 10 }: { login: string, limit: number }) {
         const users = User.users.slice(0, limit)
             .filter((user) => user.login.includes(login) && !user.isDeleted)
             .sort();
@@ -46,15 +46,15 @@ export default class User {
         return users;
     }
 
-     public static getUserById(id: string, withTrashed: boolean = false) {
+    public static getUserById(id: string, withTrashed: boolean = false) {
         const user = User.users.find((user) => {
-            return (user.id === id) && (withTrashed || !user.isDeleted)
+            return (user.id === id) && (withTrashed || !user.isDeleted);
         });
 
-         if (user !== undefined) {
-             return user;
-         }
+        if (user !== undefined) {
+            return user;
+        }
 
-         throw new Error("User doesn't exists!");
+        throw new Error("User doesn't exists!");
     }
 }

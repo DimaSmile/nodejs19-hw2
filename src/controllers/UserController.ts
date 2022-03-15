@@ -1,15 +1,15 @@
-import { Request, Response } from 'express';
-import User from "../models/User";
-import {ValidatedRequest} from "express-joi-validation";
-import {CreateOrUpdateUserRequest} from "../requests/CreateOrUpdateUserRequest";
-import {IdValidationRequestSchema} from "../requests/IdValidationRequest";
-import {GetAutoSuggestUsersRequest} from "../requests/GetAutoSuggestUsersRequest";
+import { Response } from 'express';
+import User from '../models/User';
+import { ValidatedRequest } from 'express-joi-validation';
+import { CreateOrUpdateUserRequest } from '../requests/CreateOrUpdateUserRequest';
+import { IdValidationRequestSchema } from '../requests/IdValidationRequest';
+import { GetAutoSuggestUsersRequest } from '../requests/GetAutoSuggestUsersRequest';
 
 class UserController {
     public getAutoSuggestUsers(request: ValidatedRequest<GetAutoSuggestUsersRequest>, response: Response) {
         try {
             return response.send(User.filterByLoginSubstring(request.query));
-        } catch(error: any) {
+        } catch (error: any) {
             return response.status(404).send({ errorMessage: error.message });
         }
     }
@@ -17,7 +17,7 @@ class UserController {
     public show(request: ValidatedRequest<IdValidationRequestSchema>, response: Response) {
         try {
             return response.send(User.getUserById(request.params.id));
-        } catch(error: any) {
+        } catch (error: any) {
             return response.status(404).send({ errorMessage: error.message });
         }
     }
@@ -34,17 +34,17 @@ class UserController {
             user.update(request.body);
 
             return response.status(201).send(user);
-        } catch(error: any) {
+        } catch (error: any) {
             return response.status(404).send({ errorMessage: error.message });
         }
     }
 
     public delete(request: ValidatedRequest<IdValidationRequestSchema>, response: Response) {
         try {
-            User.delete(request.params)
+            User.delete(request.params);
 
             return response.status(204).send();
-        } catch(error: any) {
+        } catch (error: any) {
             return response.status(404).send({ errorMessage: error.message });
         }
     }
