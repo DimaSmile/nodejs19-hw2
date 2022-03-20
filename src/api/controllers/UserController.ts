@@ -23,7 +23,9 @@ export default class UserController {
     public show = async (request: ValidatedRequest<IdValidationRequestSchema>, response: Response) => {
         try {
             const user = await this.userService.getUserById(request.params.id);
-            return response.send(user);
+            const { password, ...userWithoutPassword } = user.toJSON();
+
+            return response.send(userWithoutPassword);
         } catch (error: any) {
             return response.status(404).send(error.message);
         }

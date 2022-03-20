@@ -4,14 +4,16 @@ import User from '../models/user.model';
 
 @Service()
 export default class UserService {
-    public async getUserById(userId: string, withTrashed: boolean = false): Promise<User | null> {
+    public async getUserById(userId: string, withTrashed: boolean = false): Promise<User> {
         const user = await User.findOne({
             where: {
                 [Op.and]: [{ id: userId }, !withTrashed ? { isDeleted: false } : null]
-            }
+            },
         });
 
-        return user;
+        if (user) return user;
+
+        throw new Error('user not found');
     }
 
     public async filterByLoginSubstring({ login, limit = 10 }: { login: string, limit: number }): Promise<User[]> {
@@ -22,7 +24,8 @@ export default class UserService {
                 },
                 isDeleted: false
             },
-            limit
+            limit,
+            attributes: {exclude: ['password']}
         });
 
         return users;
@@ -38,15 +41,11 @@ export default class UserService {
         return newUser.id;
     }
 
-    public async update(userId: string, data: { login: string; password: string; age: number; }): Promise<User | false> {
+    public async update(userId: string, data: { login: string; password: string; age: number; }): Promise<User> {
         const user = await this.getUserById(userId);
-        if (user) {
-            await user.update(data);
+        await user.update(data);
 
-            return user;
-        }
-
-        throw new Error('user not found');
+        return user;
     }
 
     public async delete({ id }: { id: string }): Promise<boolean> {

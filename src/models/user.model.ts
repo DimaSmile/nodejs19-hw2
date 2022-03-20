@@ -30,13 +30,10 @@ export default class User extends Model implements UserI {
     @AllowNull(false)
     @NotEmpty
     @Column
-    get password(): string {
-        return this.getDataValue('password');
-    }
     set password(value: string) {
-        // console.log(value);
-        // this.bcrypt(value.toString()).then((val) => )
-        this.setDataValue('password', value.toString());
+        const hash = this.generateHash(value);
+
+        this.setDataValue('password', hash);
     }
 
     @AllowNull(false)
@@ -50,10 +47,9 @@ export default class User extends Model implements UserI {
     @Column
     declare isDeleted: boolean;
 
-    private async bcrypt(value: string) {
-        const salt = await bcrypt.genSalt(10);
-        console.log(salt);
-        const result = await bcrypt.hash(value as string, salt);
+    private generateHash(value: string) {
+        const salt = bcrypt.genSaltSync(10);
+        const result = bcrypt.hashSync(value as string, salt);
 
         return result;
     }
