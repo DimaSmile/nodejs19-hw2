@@ -11,6 +11,7 @@ export default class UserController {
     public constructor(private userService: UserService) {
         //
     }
+
     public getAutoSuggestUsers = async (request: ValidatedRequest<GetAutoSuggestUsersRequest>, response: Response) => {
         try {
             const users = await this.userService.filterByLoginSubstring(request.query);

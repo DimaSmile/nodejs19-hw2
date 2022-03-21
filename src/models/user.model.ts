@@ -1,6 +1,8 @@
 import bcrypt from 'bcrypt';
 import { v4 as uuid } from 'uuid';
-import { Model, Table, PrimaryKey, Column, AllowNull, NotEmpty, Default, IsUUID } from 'sequelize-typescript';
+import { Model, Table, PrimaryKey, Column, AllowNull, NotEmpty, Default, IsUUID, BelongsToMany } from 'sequelize-typescript';
+import Group from './group.model';
+import GroupUser from './groupUser.model';
 
 export interface UserI {
     id: string;
@@ -53,4 +55,7 @@ export default class User extends Model implements UserI {
 
         return result;
     }
+
+    @BelongsToMany(() => Group, () => GroupUser)
+    groups: Array<Group & {GroupUser: GroupUser}>;
 }

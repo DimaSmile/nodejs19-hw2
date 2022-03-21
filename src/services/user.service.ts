@@ -8,7 +8,7 @@ export default class UserService {
         const user = await User.findOne({
             where: {
                 [Op.and]: [{ id: userId }, !withTrashed ? { isDeleted: false } : null]
-            },
+            }
         });
 
         if (user) return user;
@@ -25,7 +25,7 @@ export default class UserService {
                 isDeleted: false
             },
             limit,
-            attributes: {exclude: ['password']}
+            attributes: { exclude: ['password'] }
         });
 
         return users;
