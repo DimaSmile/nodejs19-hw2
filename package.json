@@ -8,7 +8,7 @@
     "start": "npx ts-node src/index.ts",
     "lint": "eslint . --ext .ts",
     "lint-fix": "eslint . --ext .ts --fix",
-    "migrate": "npx ts-node -T ./src/bin/migrate.ts"
+    "migrate": "npx ts-node ./src/bin/migrate.ts"
   },
   "keywords": [],
   "author": "",
