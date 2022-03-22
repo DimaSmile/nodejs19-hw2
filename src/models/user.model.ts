@@ -1,4 +1,4 @@
-import bcrypt from 'bcrypt';
+import { bcrypt } from '../utils/bcrypt';
 import { v4 as uuid } from 'uuid';
 import { Model, Table, PrimaryKey, Column, AllowNull, NotEmpty, Default, IsUUID, BelongsToMany } from 'sequelize-typescript';
 import Group from './group.model';
@@ -33,7 +33,7 @@ export default class User extends Model implements UserI {
     @NotEmpty
     @Column
     set password(value: string) {
-        const hash = this.generateHash(value);
+        const hash = bcrypt.generateHashSync(value);
 
         this.setDataValue('password', hash);
     }
@@ -48,13 +48,6 @@ export default class User extends Model implements UserI {
     @Default(false)
     @Column
     declare isDeleted: boolean;
-
-    private generateHash(value: string) {
-        const salt = bcrypt.genSaltSync(10);
-        const result = bcrypt.hashSync(value as string, salt);
-
-        return result;
-    }
 
     @BelongsToMany(() => Group, () => GroupUser)
     groups: Array<Group & {GroupUser: GroupUser}>;
