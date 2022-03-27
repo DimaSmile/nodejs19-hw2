@@ -1,6 +1,7 @@
 import { Op } from 'sequelize';
 import { Service } from 'typedi';
 import User from '../models/user.model';
+import ModelNotFoundException from '../exceptions/ModelNotFoundException';
 
 @Service()
 export default class UserService {
@@ -13,7 +14,7 @@ export default class UserService {
 
         if (user) return user;
 
-        throw new Error('user not found');
+        throw new ModelNotFoundException();
     }
 
     public async filterByLoginSubstring({ login, limit = 10 }: { login: string, limit: number }): Promise<User[]> {

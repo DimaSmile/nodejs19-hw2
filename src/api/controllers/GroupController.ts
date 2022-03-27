@@ -1,5 +1,5 @@
 import { Service } from 'typedi';
-import { Response } from 'express';
+import { NextFunction, Response } from 'express';
 import { ValidatedRequest } from 'express-joi-validation';
 import GroupService from './../../services/group.service';
 import { GroupIdValidationRequestSchema } from '../requests/groups/GroupIdValidationRequest';
@@ -12,53 +12,53 @@ export default class GroupController {
         //
     }
 
-    public show = async (request: ValidatedRequest<GroupIdValidationRequestSchema>, response: Response) => {
+    public show = async (request: ValidatedRequest<GroupIdValidationRequestSchema>, response: Response, next: NextFunction) => {
         try {
             const group = await this.groupService.getGroupById(request.params.id);
 
             return response.send(group);
         } catch (error: any) {
-            return response.status(404).send(error.message);
+            next(error);
         }
     };
 
-    public store = async (request: ValidatedRequest<CreateOrUpdateGroupRequest>, response: Response) => {
+    public store = async (request: ValidatedRequest<CreateOrUpdateGroupRequest>, response: Response, next: NextFunction) => {
         try {
             const groupId = await this.groupService.create(request.body);
 
             return response.status(201).send({ id: groupId });
         } catch (error: any) {
-            return response.status(404).send(error.message);
+            next(error);
         }
     };
 
-    public update = async (request: ValidatedRequest<CreateOrUpdateGroupRequest>, response: Response) => {
+    public update = async (request: ValidatedRequest<CreateOrUpdateGroupRequest>, response: Response, next: NextFunction) => {
         try {
             const group = await this.groupService.update(request.params.id, request.body);
 
             return response.send(group);
         } catch (error: any) {
-            return response.status(404).send({ errorMessage: error.message });
+            next(error);
         }
     };
 
-    public delete = async (request: ValidatedRequest<GroupIdValidationRequestSchema>, response: Response) => {
+    public delete = async (request: ValidatedRequest<GroupIdValidationRequestSchema>, response: Response, next: NextFunction) => {
         try {
             await this.groupService.delete(request.params);
 
             return response.status(204).send();
         } catch (error: any) {
-            return response.status(404).send({ errorMessage: error.message });
+            next(error);
         }
     };
 
-    public addUsersToGroup = async (request: ValidatedRequest<AddUsersToGroupRequest>, response: Response) => {
+    public addUsersToGroup = async (request: ValidatedRequest<AddUsersToGroupRequest>, response: Response, next: NextFunction) => {
         try {
             await this.groupService.addUsersToGroup(request.params, request.body);
 
             return response.status(204).send();
         } catch (error: any) {
-            return response.status(404).send({ errorMessage: error.message });
+            next(error);
         }
     };
 }

@@ -16,7 +16,7 @@ const userController = Container.get(UserController);
 const groupController = Container.get(GroupController);
 
 // User routes
-apiRouter.get('/users/:id', validator.params(idValidationRequest), userController.show);
+apiRouter.get('/users/:id', [validator.params(idValidationRequest)], userController.show);
 apiRouter.get('/users', validator.query(getAutoSuggestUsers), userController.getAutoSuggestUsers);
 apiRouter.post('/users', validator.body(createUserValidation), userController.store);
 apiRouter.put(
@@ -26,7 +26,6 @@ apiRouter.put(
     userController.update
 );
 apiRouter.delete('/users/:id',  validator.params(idValidationRequest), userController.delete);
-
 
 // Group routes
 apiRouter.get('/groups/:id', validator.params(groupIdValidation), groupController.show);

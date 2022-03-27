@@ -3,6 +3,7 @@ import { Service } from 'typedi';
 import DB from '../database';
 import Group from '../models/group.model';
 import GroupUser from '../models/groupUser.model';
+import ModelNotFoundException from '../exceptions/ModelNotFoundException';
 
 @Service()
 export default class GroupService {
@@ -11,7 +12,7 @@ export default class GroupService {
 
         if (group) return group;
 
-        throw new Error('Group not found');
+        throw new ModelNotFoundException();
     }
 
     public async create(data: {

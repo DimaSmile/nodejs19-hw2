@@ -1,6 +1,9 @@
 import express from 'express';
 import { apiRouter } from './routes/api';
 import DB  from './database';
+import errorMiddleware from './middlwares/error.handling';
+import loggerMiddleware  from './middlwares/logger';
+import { tracker } from './middlwares/tracker';
 
 export class App {
     public app: express.Application;
@@ -11,15 +14,23 @@ export class App {
         this.port = port;
 
         this.bindMiddlewares();
-        this.bindRoutes();
+        this.bindApiRoutes();
+
+        this.bindErrorHandling();
     }
 
     private bindMiddlewares() {
+        this.app.use(tracker);
         this.app.use(express.json());
+        this.app.use(loggerMiddleware);
     }
 
-    private bindRoutes() {
+    private bindApiRoutes() {
         this.app.use('/api', apiRouter);
+    }
+
+    private bindErrorHandling() {
+        this.app.use(errorMiddleware);
     }
 
     public listen() {
