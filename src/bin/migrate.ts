@@ -4,10 +4,10 @@ import DB from '../database';
 
 async function seedUsers() {
     const users = [
-        { login: 'Test', password: 123456, age: 20 },
+        { login: 'Test', password: '123456', age: 20 },
         { login: 'Test2', password: 'pass', age: 21 },
-        { login: 'Test3', password: 111111, age: 22 },
-        { login: 'Test4', password: 123123, age: 25 }
+        { login: 'Test3', password: '111111', age: 22 },
+        { login: 'Test4', password: '123123', age: 25 }
     ];
 
     await User.bulkCreate(users);
