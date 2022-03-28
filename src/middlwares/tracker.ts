@@ -8,19 +8,21 @@ const getDurationInMilliseconds = (start?: [number, number]) => {
     return (diff[0] * NS_PER_SEC + diff[1]) / NS_TO_MS;
 };
 
-export const tracker = (req: Request, res: Response, next: NextFunction) => {
-    console.log('[STARTED]');
-    const start = process.hrtime();
+export const tracker = () => {
+    return (req: Request, res: Response, next: NextFunction) => {
+        console.log('[STARTED]');
+        const start = process.hrtime();
 
-    res.on('finish', () => {
-        const durationInMilliseconds = getDurationInMilliseconds(start);
-        console.log(`[FINISHED] ${durationInMilliseconds.toLocaleString()} ms`);
-    });
+        res.on('finish', () => {
+            const durationInMilliseconds = getDurationInMilliseconds(start);
+            console.log(`[FINISHED] ${durationInMilliseconds.toLocaleString()} ms`);
+        });
 
-    res.on('close', () => {
-        const durationInMilliseconds = getDurationInMilliseconds(start);
-        console.log(`[CLOSED] ${durationInMilliseconds.toLocaleString()} ms`);
-    });
+        res.on('close', () => {
+            const durationInMilliseconds = getDurationInMilliseconds(start);
+            console.log(`[CLOSED] ${durationInMilliseconds.toLocaleString()} ms`);
+        });
 
-    next();
+        next();
+    };
 };

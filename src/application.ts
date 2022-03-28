@@ -1,9 +1,11 @@
 import express from 'express';
+import cors from 'cors';
 import { apiRouter } from './routes/api';
 import DB  from './database';
 import errorMiddleware from './middlwares/error.handling';
 import loggerMiddleware  from './middlwares/logger';
 import { tracker } from './middlwares/tracker';
+import { authenticateUser } from './middlwares/auth';
 
 export class App {
     public app: express.Application;
@@ -20,9 +22,11 @@ export class App {
     }
 
     private bindMiddlewares() {
-        this.app.use(tracker);
+        this.app.use(cors());
+        this.app.use(tracker());
         this.app.use(express.json());
-        this.app.use(loggerMiddleware);
+        this.app.use(loggerMiddleware());
+        this.app.use(authenticateUser());
     }
 
     private bindApiRoutes() {
@@ -30,7 +34,7 @@ export class App {
     }
 
     private bindErrorHandling() {
-        this.app.use(errorMiddleware);
+        this.app.use(errorMiddleware());
     }
 
     public listen() {

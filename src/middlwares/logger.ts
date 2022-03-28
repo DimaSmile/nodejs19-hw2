@@ -11,11 +11,13 @@ const logger = createLogger({
     transports: [new transports.Console()]
 });
 
-const loggerMiddleware = (request: Request, response: Response, next: NextFunction) => {
-    const message = `Method: ${request.method}, URL: ${request.url}, Params: ${JSON.stringify(request.params)}, Query data: ${JSON.stringify(request.query)}`;
-    logger.info(message);
+const loggerMiddleware = () => {
+    return (request: Request, response: Response, next: NextFunction) => {
+        const message = `Method: ${request.method}, URL: ${request.url}, Params: ${JSON.stringify(request.params)}, Query data: ${JSON.stringify(request.query)}`;
+        logger.info(message);
 
-    next();
+        next();
+    };
 };
 
 export default loggerMiddleware;

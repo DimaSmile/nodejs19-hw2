@@ -2,6 +2,8 @@ import { Op } from 'sequelize';
 import { Service } from 'typedi';
 import User from '../models/user.model';
 import ModelNotFoundException from '../exceptions/ModelNotFoundException';
+import HttpException from '../exceptions/HttpException';
+import { jwt } from '../utils/jwt';
 
 @Service()
 export default class UserService {
@@ -59,6 +61,24 @@ export default class UserService {
         }
 
         return false;
+    }
+
+    public async login(login: string, password: string) {
+        const user = await User.findOne({
+            where: {
+                login,
+                password
+            }
+        });
+
+        if (!user) {
+            throw new HttpException(400, 'Login or password are invalid');
+        }
+
+        const token = jwt.sign({ id: user.id, login: user.login });
+
+
+        return token;
     }
 }
 
