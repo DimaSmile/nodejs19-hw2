@@ -1,6 +1,5 @@
 import { createLogger, format, transports } from 'winston';
 import { NextFunction, Request, Response } from 'express';
-import { ValidatedRequest } from 'express-joi-validation';
 
 const logger = createLogger({
     format: format.combine(
@@ -9,7 +8,7 @@ const logger = createLogger({
         }),
         format.json()
     ),
-    transports: [new transports.Console()],
+    transports: [new transports.Console()]
 });
 
 const loggerMiddleware = (request: Request, response: Response, next: NextFunction) => {
@@ -17,6 +16,6 @@ const loggerMiddleware = (request: Request, response: Response, next: NextFuncti
     logger.info(message);
 
     next();
-}
+};
 
 export default loggerMiddleware;

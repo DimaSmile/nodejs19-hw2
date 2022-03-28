@@ -7,8 +7,8 @@ const errorMiddleware = (error: any, request: Request, response: Response, next:
         .status(status)
         .send({
             status,
-            message,
-        })
-}
+            message
+        });
+};
 
 export default errorMiddleware;
