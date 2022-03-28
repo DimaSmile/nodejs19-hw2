@@ -32,11 +32,7 @@ export default class User extends Model implements UserI {
     @AllowNull(false)
     @NotEmpty
     @Column
-    set password(value: string) {
-        const hash = bcrypt.generateHashSync(value);
-
-        this.setDataValue('password', hash);
-    }
+    declare password: string
 
     @AllowNull(false)
     @NotEmpty

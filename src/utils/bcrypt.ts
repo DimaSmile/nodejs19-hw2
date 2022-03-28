@@ -1,11 +1,14 @@
 import * as bc from 'bcrypt';
 
 class Bcrypt {
-    public generateHashSync(value: string): string {
-        const salt = bc.genSaltSync(10);
-        const result = bc.hashSync(value, salt);
+    public async generateHash(value: string): Promise<string> {
+        const salt = await bc.genSalt(10);
 
-        return result;
+        return await bc.hash(value, salt);
+    }
+
+    public async compare(password: string, hash: string): Promise<boolean> {
+        return await bc.compare(password, hash);
     }
 }
 

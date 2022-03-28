@@ -4,6 +4,7 @@ import User from '../models/user.model';
 import ModelNotFoundException from '../exceptions/ModelNotFoundException';
 import HttpException from '../exceptions/HttpException';
 import { jwt } from '../utils/jwt';
+import { bcrypt } from '../utils/bcrypt';
 
 @Service()
 export default class UserService {
@@ -39,12 +40,15 @@ export default class UserService {
         password: string,
         age: number
     }): Promise<string> {
+        data.password = await bcrypt.generateHash(data.password);
         const newUser = await User.create(data);
 
         return newUser.id;
     }
 
     public async update(userId: string, data: { login: string; password: string; age: number; }): Promise<User> {
+        data.password = await bcrypt.generateHash(data.password);
+
         const user = await this.getUserById(userId);
         await user.update(data);
 
@@ -67,18 +71,21 @@ export default class UserService {
         const user = await User.findOne({
             where: {
                 login,
-                password
+                isDeleted: false
             }
         });
 
-        if (!user) {
-            throw new HttpException(400, 'Login or password are invalid');
+        if (user) {
+            const isValidPassword = await bcrypt.compare(password, user.password);
+
+            if (isValidPassword) {
+                const token = jwt.sign({ id: user.id, login: user.login });
+
+                return token;
+            }
         }
 
-        const token = jwt.sign({ id: user.id, login: user.login });
-
-
-        return token;
+        throw new HttpException(400, 'Login or password are invalid');
     }
 }
 

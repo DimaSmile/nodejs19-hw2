@@ -45,8 +45,9 @@ export default class UserController {
     public update = async (request: ValidatedRequest<any>, response: Response, next: NextFunction) => {
         try {
             const user = await this.userService.update(request.params.id, request.body);
+            const { password, ...userWithoutPassword } = user.toJSON();
 
-            return response.send(user);
+            return response.send(userWithoutPassword);
         } catch (error: any) {
             next(error);
         }
